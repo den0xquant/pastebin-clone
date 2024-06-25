@@ -32,10 +32,8 @@ class Paste(Base, TimestampMixin):
     name = Column(String, nullable=False)
     text = Column(Text, nullable=False)
     syntax_highlight = Column(Text, nullable=False)
-
-    exposure = Column(..., nullable=False)
-    expiration = Column(... ,nullable=False)
-
+    exposure = Column(DateTime, nullable=False)
+    expiration = Column(DateTime, nullable=False)
     password_disabled = Column(Boolean(), default=False)
     password = Column(String, nullable=True)
     burn_after_read = Column(Boolean(), default=False)
@@ -51,3 +49,11 @@ class Category(Base, TimestampMixin):
 
     id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
     name = Column(String, nullable=False)
+
+
+class Tag(Base, TimestampMixin):
+    __tablename__ = 'tags'
+
+    id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
+    name = Column(String, nullable=False)
+
