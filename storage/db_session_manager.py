@@ -8,12 +8,8 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
-from sqlalchemy.orm import declarative_base
 
 from config import settings
-
-
-Base = declarative_base()
 
 
 class DatabaseSessionManager:
