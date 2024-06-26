@@ -6,8 +6,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 
-from storage.db_models import Paste
-from storage.db_session_manager import get_db_session
+from storage.db.models import Paste
+from storage.db.session_manager import get_db_session
 
 
 paste_router = APIRouter(prefix="/v1/pastes", tags=["paste_router", "paste"])

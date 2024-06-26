@@ -5,8 +5,16 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ~/apps/postgres:/var/lib/postgresql/data
+      - ../volumes/postgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=pastebin
       - POSTGRES_USER=pastebin
       - POSTGRES_DB=pastebin
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ../volumes/redis:/data

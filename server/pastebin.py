@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from controller.paste import paste_router
-from storage.db_session_manager import session_manager
+from storage.db.session_manager import session_manager
 
 
 @asynccontextmanager
