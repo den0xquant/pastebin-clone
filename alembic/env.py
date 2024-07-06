@@ -8,8 +8,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from config.base import settings
-from storage.db.models import Base
+from app.config import settings
+from app.models.orm import Base
 
 
 sys.path = ['', '..'] + sys.path[1:]

@@ -1,3 +1,7 @@
 #!/bin/bash
 
-docker-compose --env-file .dev.env --file docker/docker-compose.yml --file docker/docker-compose.dev.yml up -d app
+echo "Alembic upgrades migrations..."
+alembic upgrade head
+
+echo "Starting Fastapi server..."
+fastapi dev app/main.py --port 5000

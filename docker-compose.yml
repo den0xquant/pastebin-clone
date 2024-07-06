@@ -1,0 +1,50 @@
+version: '2'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    image: pastebin-fastapi:latest
+    container_name: api
+    env_file:
+      - docker.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+      - redis
+
+  hash_generator:
+    build:
+      context: .
+      dockerfile: ./docker/hash_generator/Dockerfile
+    container_name: hash_generator
+    env_file:
+      - docker.env
+    depends_on:
+      - redis
+
+  db:
+    image: postgres:14-alpine
+    container_name: db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=pastebin
+      - POSTGRES_USER=pastebin
+      - POSTGRES_DB=pastebin
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./volumes/redis:/data
+
+
+volumes:
+  postgres:
+  redis:

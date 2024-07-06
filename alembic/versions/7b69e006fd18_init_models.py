@@ -1,8 +1,8 @@
-"""Adding models
+"""Init models
 
-Revision ID: 3147fd97b972
-Revises: 82ffa14623b2
-Create Date: 2024-06-26 04:23:41.692471
+Revision ID: 7b69e006fd18
+Revises: 
+Create Date: 2024-07-05 04:48:01.587297
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '3147fd97b972'
-down_revision: Union[str, None] = '82ffa14623b2'
+revision: str = '7b69e006fd18'
+down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -24,7 +24,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.Column('updated_at', sa.TIMESTAMP(timezone=True), nullable=False),
+    sa.Column('updated_at', sa.TIMESTAMP(timezone=True), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('id')
     )
@@ -36,7 +36,7 @@ def upgrade() -> None:
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('last_login', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.Column('updated_at', sa.TIMESTAMP(timezone=True), nullable=False),
+    sa.Column('updated_at', sa.TIMESTAMP(timezone=True), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
@@ -48,13 +48,14 @@ def upgrade() -> None:
     sa.Column('syntax_highlight', sa.Boolean(), nullable=False),
     sa.Column('exposure', sa.Enum('PUBLIC', 'PRIVATE', 'UNLISTED', name='exposure'), nullable=False),
     sa.Column('category', sa.Enum('PROGRAMMING', 'CONFIGURATION_FILES', 'SCRIPTS', 'DOCUMENTATION', 'LOGS', 'DATA', 'SNIPPETS', 'NOTES', 'TEXT', 'TEMPLATES', 'SECURITY', 'MISCELLANEOUS', name='pastecategory'), nullable=False),
-    sa.Column('expiration', sa.TIMESTAMP(timezone=True), nullable=False),
+    sa.Column('expiration', sa.Enum('NEVER', 'MINUTES_10', 'HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR', name='expiration'), nullable=False),
     sa.Column('password_disabled', sa.Boolean(), nullable=False),
     sa.Column('password', sa.String(), nullable=True),
     sa.Column('burn_after_read', sa.Boolean(), nullable=False),
-    sa.Column('user_id', sa.UUID(), nullable=False),
+    sa.Column('hash_id', sa.String(), nullable=True),
+    sa.Column('user_id', sa.UUID(), nullable=True),
     sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.Column('updated_at', sa.TIMESTAMP(timezone=True), nullable=False),
+    sa.Column('updated_at', sa.TIMESTAMP(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('id'),

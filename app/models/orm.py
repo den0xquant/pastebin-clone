@@ -13,7 +13,7 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from model.utils import Exposure, PasteCategory
+from app.models.schemas import Exposure, PasteCategory, Expiration
 
 
 class Base(DeclarativeBase):
@@ -24,7 +24,7 @@ class Base(DeclarativeBase):
 
 class TimestampMixin:
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(onupdate=func.now())
+    updated_at: Mapped[datetime | None] = mapped_column(onupdate=func.now())
 
 
 class User(Base, TimestampMixin):
@@ -56,15 +56,15 @@ class Paste(Base, TimestampMixin):
     syntax_highlight: Mapped[bool]
     exposure: Mapped[Exposure]
     category: Mapped[PasteCategory]
-    expiration: Mapped[datetime]
+    expiration: Mapped[Expiration] = mapped_column(default=Expiration.NEVER)
     password_disabled: Mapped[bool] = mapped_column(default=False)
     password: Mapped[Optional[str]]
     burn_after_read: Mapped[bool] = mapped_column(default=False)
-    hash_id: Mapped[str]
+    hash_id: Mapped[Optional[str]]
 
     # relations
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"))
-    user: Mapped["User"] = relationship(back_populates="pastes")
+    user_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("users.id"))
+    user: Mapped[Optional["User"]] = relationship(back_populates="pastes")
     tags: Mapped[List["Tag"]] = relationship(
         secondary=association_table, back_populates="pastes")
 
