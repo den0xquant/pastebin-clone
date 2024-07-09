@@ -44,3 +44,9 @@ class PastebinRedis(redis.Redis):
             data = json.loads(cached_paste)
             data.update({'expiration': Expiration.__members__.get(data['expiration'])})
             return PasteSchema(**data)
+
+    async def incr_paste_views(self, hash_id: str):
+        await self.incr(get_views_key(hash_id))
+
+    async def set_paste_views(self, hash_id: str):
+        await self.set(get_views_key(hash_id), 0)

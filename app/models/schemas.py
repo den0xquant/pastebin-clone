@@ -4,7 +4,6 @@ from enum import Enum
 from typing import Any, Optional
 
 from pydantic import BaseModel
-from pydantic.main import Model
 
 
 class Exposure(Enum):
@@ -56,7 +55,7 @@ class APIError(BaseModel):
 
 class APIResponse(BaseModel):
     success: bool
-    response: dict[str, Any]
+    response: dict[str, Any] | list
     status_code: int
     error: APIError | None = None
 
@@ -66,14 +65,19 @@ class TimeMixin(BaseModel):
     updated_at: datetime | None
 
 
-class UserSchema(BaseModel):
-    id: uuid.UUID
+class CreateUserSchema(BaseModel):
     username: str
     email: str
-    password: str
+    hashed_password: str
+
+
+class UserSchema(CreateUserSchema):
+    id: uuid.UUID
     is_active: bool
     last_login: Optional[datetime]
-    pastes: list["PasteSchema"]
+
+    class Config:
+        from_attributes = True
 
 
 class TagSchema(TimeMixin):
@@ -105,3 +109,12 @@ class PasteSchema(CreatePasteSchema, TimeMixin):
     id: int
     hash_id: str
     expiration: Expiration
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str | None = None

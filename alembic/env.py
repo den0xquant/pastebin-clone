@@ -19,11 +19,11 @@ sys.path = ['', '..'] + sys.path[1:]
 config = context.config
 
 section = config.config_ini_section
-config.set_section_option(section, "DATABASE_USER", settings.database_user)
-config.set_section_option(section, "DATABASE_PASSWORD", settings.database_password)
-config.set_section_option(section, "DATABASE_HOST", settings.database_host)
-config.set_section_option(section, "DATABASE_PORT", settings.database_port)
-config.set_section_option(section, "DATABASE_NAME", settings.database_name)
+config.set_section_option(section, "DATABASE_USER", settings.DATABASE_USER)
+config.set_section_option(section, "DATABASE_PASSWORD", settings.DATABASE_PASSWORD)
+config.set_section_option(section, "DATABASE_HOST", settings.DATABASE_HOST)
+config.set_section_option(section, "DATABASE_PORT", settings.DATABASE_PORT)
+config.set_section_option(section, "DATABASE_NAME", settings.DATABASE_NAME)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

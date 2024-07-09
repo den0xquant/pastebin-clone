@@ -5,6 +5,7 @@ from fastapi import FastAPI
 
 from app.dependencies import session_manager
 from app.routers.pastes import router as pastes_router
+from app.routers.users import router as auth_router
 
 
 @asynccontextmanager
@@ -17,6 +18,7 @@ async def lifespan(app: FastAPI):
 pastebin = FastAPI(lifespan=lifespan)
 
 pastebin.include_router(pastes_router)
+pastebin.include_router(auth_router)
 
 
 if __name__ == "__main__":

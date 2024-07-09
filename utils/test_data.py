@@ -11,6 +11,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.config import settings
 from app.models import orm
+from app.service.auth import get_password_hash
 
 
 engine = create_async_engine(settings.database_url)
@@ -26,7 +27,7 @@ def generate_user() -> dict[str, Any]:
         "id": str(uuid.uuid4()),
         "username": generate_random_string(12),
         "email": generate_random_string(12),
-        "password": generate_random_string(12),
+        "hashed_password": get_password_hash('secret'),
         "is_active": True,
         "pastes": [],
     }
@@ -79,8 +80,8 @@ async def insert_pastes(count: int):
 
 
 async def main():
-    tasks = [insert_users(10), insert_pastes(10)]
-    await asyncio.gather(*tasks)
+    await asyncio.gather(insert_users(10))
+    await asyncio.gather(insert_pastes(10))
 
 
 if __name__ == '__main__':

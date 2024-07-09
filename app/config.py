@@ -2,13 +2,16 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    database_user: str
-    database_password: str
-    database_name: str
-    database_host: str
-    database_port: str
-    redis_host: str
-    redis_port: str
+    SECRET_KEY: str
+    ALGORITHM: str = 'HS256'
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    DATABASE_USER: str
+    DATABASE_PASSWORD: str
+    DATABASE_NAME: str
+    DATABASE_HOST: str
+    DATABASE_PORT: str
+    REDIS_HOST: str
+    REDIS_PORT: str
 
     HASH_LENGTH: int = 20
     HASH_COUNT: int = 10_000
@@ -23,13 +26,13 @@ class Settings(BaseSettings):
     @property
     def database_url(self) -> str:
         return "postgresql+asyncpg://%s:%s@%s:%s/%s" % (
-            self.database_user, self.database_password,
-            self.database_host, self.database_port, self.database_name
+            self.DATABASE_USER, self.DATABASE_PASSWORD,
+            self.DATABASE_HOST, self.DATABASE_PORT, self.DATABASE_NAME
         )
 
     @property
     def redis_url(self) -> str:
-        return "redis://%s:%s/0" % (self.redis_host, self.redis_port)
+        return "redis://%s:%s/0" % (self.REDIS_HOST, self.REDIS_PORT)
 
 
 settings = Settings(_env_file='.env', _env_file_encoding='utf-8')  # type: ignore

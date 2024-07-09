@@ -33,7 +33,7 @@ class User(Base, TimestampMixin):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     username: Mapped[str] = mapped_column(unique=True)
     email: Mapped[str] = mapped_column(unique=True)
-    password: Mapped[str]
+    hashed_password: Mapped[str]
     is_active: Mapped[bool] = mapped_column(default=False)
     last_login: Mapped[datetime] = mapped_column(server_default=func.now())
     pastes: Mapped[List["Paste"]] = relationship(back_populates="user")

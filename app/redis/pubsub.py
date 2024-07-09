@@ -4,6 +4,7 @@ from string import ascii_letters, digits
 
 import redis
 from sqlalchemy import select
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.config import settings
 from app.dependencies import get_sync_db_session
@@ -13,8 +14,8 @@ from app.models.orm import Paste
 ASCII_LETTERS_AND_DIGITS = ascii_letters + digits
 
 redis_connection_pool = redis.ConnectionPool(
-    host=settings.redis_host,
-    port=settings.redis_port,
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
     decode_responses=True,
 )
 
@@ -50,13 +51,20 @@ def paste_delete_handler(message: dict[str, str]):
 
         paste_hash_id = paste_delete_key.replace(settings.REDIS_DELETE_PREFIX, "")
         sync_session = get_sync_db_session()
-        with sync_session() as session:
-            stmt = select(Paste).filter_by(hash_id=paste_hash_id)
-            paste = session.scalars(stmt).first()
 
-            if paste is not None:
-                session.delete(paste)
-                session.commit()
+        with sync_session() as session:
+            try:
+                stmt = select(Paste).filter_by(hash_id=paste_hash_id)
+                paste = session.scalars(stmt).first()
+
+                if paste is not None:
+                    session.delete(paste)
+                    session.commit()
+
+            except SQLAlchemyError as e:
+                # TODO: LOGGING
+                print(str(e))
+                session.rollback()
 
 
 def main():
