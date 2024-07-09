@@ -8,7 +8,6 @@ from sqlalchemy.orm import sessionmaker
 
 from app.config import settings
 from app.db.session_manager import session_manager
-from app.models.schemas import UserSchema
 from app.redis.cache import PastebinRedis
 
 
